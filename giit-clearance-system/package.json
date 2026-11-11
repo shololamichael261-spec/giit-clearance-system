@@ -1,0 +1,10 @@
+{
+  "name": "giit-clearance-system",
+  "version": "1.0.0",
+   "description": "GIIT Clearance System — a separate Firebase-powered student clearance portal with one central administrator.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node test_static.mjs"
+  }
+}

@@ -1,0 +1,120 @@
+rules_version = '2';
+
+/*
+  GIIT CLEARANCE SYSTEM — FIRESTORE SECURITY RULES
+  ------------------------------------------------
+  Publish these rules to the Firestore database used by firebase-config.js.
+
+  Security model:
+  - Only ONE Firebase Auth email is allowed to be an administrator:
+    feranmiadmin@gmail.com
+  - Admin signup is disabled in the app and blocked by these rules.
+  - A non-admin can only create a profile with role == "student".
+  - Only the fixed admin can read all users/payments and approve/reject proofs.
+  - All clearance records use GIIT-only collection names, so this app does not
+    read or write the old legacy clearance system collections.
+
+  IMPORTANT: If you change adminEmail in firebase-config.js, change the
+  ADMIN_EMAIL string below as well.
+*/
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email == "feranmiadmin@gmail.com";
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function profilePath(uid) {
+      return /databases/$(database)/documents/giit_clearance_users/$(uid);
+    }
+
+    function hasProfile() {
+      return signedIn() && exists(profilePath(request.auth.uid));
+    }
+
+    function myProfile() {
+      return get(profilePath(request.auth.uid));
+    }
+
+    function isStudent() {
+      return hasProfile() && myProfile().data.role == "student";
+    }
+
+    function isClearedStudent() {
+      return hasProfile()
+        && myProfile().data.role == "student"
+        && myProfile().data.clearanceStatus == "Cleared";
+    }
+
+    function validRoleFor(userId) {
+      return (request.resource.data.role == "admin"
+          && isAdmin()
+          && request.auth.uid == userId)
+        || request.resource.data.role == "student";
+    }
+
+    // ── GIIT users / students ──────────────────────────────────
+    match /giit_clearance_users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+
+      // A student may create only their own student profile.
+      // Only the fixed admin email may create its own admin profile.
+      allow create: if isOwner(userId) && validRoleFor(userId);
+
+      // Admin can update clearance status, but cannot turn another user
+      // into an admin because validRoleFor() enforces the role.
+      allow update: if isAdmin() && validRoleFor(userId);
+
+      allow delete: if isAdmin() && userId != request.auth.uid;
+    }
+
+    // ── GIIT payment proofs ────────────────────────────────────
+    match /giit_clearance_payments/{paymentId} {
+      allow get: if signedIn()
+        && (resource.data.studentId == request.auth.uid || isAdmin());
+
+      allow list: if isAdmin()
+        || (signedIn() && resource.data.studentId == request.auth.uid);
+
+      allow create: if signedIn()
+        && request.resource.data.studentId == request.auth.uid
+        && request.resource.data.status == "Pending"
+        && isStudent();
+
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── GIIT clearance certificates ────────────────────────────
+    match /giit_clearance_certificates/{certificateId} {
+      // Public QR verification can fetch one certificate by ID.
+      allow get: if true;
+      allow list: if isAdmin();
+
+      allow create, update: if signedIn()
+        && request.resource.data.certificateId == certificateId
+        && request.resource.data.studentId == request.auth.uid
+        && request.resource.data.clearanceStatus == "Cleared"
+        && request.resource.data.status == "Valid"
+        && isClearedStudent();
+
+      allow delete: if isAdmin();
+    }
+
+    // Everything else is denied by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

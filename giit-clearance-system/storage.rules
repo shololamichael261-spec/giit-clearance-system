@@ -1,0 +1,31 @@
+rules_version = '2';
+
+/*
+  GIIT Clearance System does NOT use Firebase Storage.
+
+  Payment proofs are uploaded directly to Cloudinary from the browser and only
+  the returned secure URL is saved in the GIIT Firestore database. This avoids
+  needing a Firebase Blaze plan for file storage.
+
+  This file is kept only as a reference in case GIIT later decides to migrate
+  proof files from Cloudinary back to Firebase Storage.
+*/
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwnProof(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    match /giit-clearance-system/payment-proofs/{userId}/{fileName} {
+      allow read: if signedIn();
+      allow write: if isOwnProof(userId)
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*|application/pdf');
+    }
+  }
+}

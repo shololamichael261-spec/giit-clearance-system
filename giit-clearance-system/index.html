@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GIIT Clearance System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <header class="topbar landing-nav">
+    <div class="brand">
+      <div class="brand-logo-wrap"><img src="giit-africa-logo.svg" alt="GIIT Africa" class="brand-logo" /></div>
+      <div>
+        <h1>GIIT Clearance System</h1>
+        <p>GIIT Africa digital student clearance portal</p>
+      </div>
+    </div>
+    <nav class="top-actions">
+      <button class="btn ghost nav-student-login">Student Login</button>
+      <button class="btn ghost nav-admin-login">Admin Login</button>
+      <button id="logoutBtn" class="btn ghost hidden">Logout</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="landingView" class="landing-view">
+      <div class="landing-hero">
+        <div class="landing-copy">
+          <span class="eyebrow">GIIT Secure Digital Clearance</span>
+          <h2>Graduate clearance made faster, transparent and paperless.</h2>
+          <p>GIIT students can submit payment evidence, track review progress and download a clearance certificate after approval by the central administrator.</p>
+          <div class="landing-actions">
+            <button class="btn primary nav-student-signup">Get Started as Student</button>
+            <button class="btn secondary nav-student-login">Student Login</button>
+            <button class="btn ghost nav-admin-login">Admin Login</button>
+          </div>
+          <div class="trust-row">
+            <span>Secure student access</span><span>Central admin review</span><span>Certificate verification</span>
+          </div>
+          <p class="admin-note">A single central administrator controls every clearance department. Public admin signup is disabled.</p>
+        </div>
+        <div class="hero-dashboard-card">
+          <div class="mini-top"><span></span><span></span><span></span></div>
+          <h3>Clearance Workflow</h3>
+          <div class="timeline">
+            <div><b>01</b><span>Student submits payment proof</span></div>
+            <div><b>02</b><span>Admin verifies receipt</span></div>
+            <div><b>03</b><span>Status updates automatically</span></div>
+            <div><b>04</b><span>Certificate becomes available</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+        <article><div class="feature-icon">🎓</div><h3>Student Portal</h3><p>Register, submit payment proof to departments, monitor payment history and clearance status.</p></article>
+        <article><div class="feature-icon">🛡️</div><h3>Central Administrator</h3><p>One fixed admin account controls every department, student record and payment decision.</p></article>
+        <article><div class="feature-icon">📊</div><h3>Reports</h3><p>Generate CSV reports for students, clearance status, payments and outstanding balances.</p></article>
+      </div>
+
+      <section class="process-section">
+        <span class="eyebrow">How it works</span>
+        <h2>From payment proof to approved clearance certificate.</h2>
+        <div class="workflow large">
+          <div><strong>1</strong><span>Student creates account</span></div>
+          <div><strong>2</strong><span>Selects payment type and department</span></div>
+          <div><strong>3</strong><span>Uploads payment proof</span></div>
+          <div><strong>4</strong><span>Central admin reviews</span></div>
+        </div>
+      </section>
+
+      <section class="privacy-section">
+        <span class="eyebrow">Data Privacy</span>
+        <h2>Your payment documents are handled carefully.</h2>
+        <p>Uploaded payment proofs are used only for GIIT clearance verification. Only the designated central administrator can review submissions.</p>
+      </section>
+    </section>
+
+    <section id="authView" class="auth-layout hidden">
+      <div class="hero-card auth-info-card">
+        <span class="eyebrow" id="authEyebrow">Student Access</span>
+        <h2 id="authHeroTitle">Access your clearance portal.</h2>
+        <p id="authHeroText">Login or create a GIIT student account to manage payment proof and clearance certificate.</p>
+        <div class="demo-box real-box">
+          <b>Secure Clearance Access</b>
+          <p>GIIT payment proofs are reviewed only by the designated central administrator.</p>
+          <p>Certificate records can be verified online using the QR code on the downloaded PDF.</p>
+        </div>
+      </div>
+
+      <div class="auth-card">
+        <button id="backHomeBtn" class="btn ghost full">← Back to Landing Page</button>
+        <div class="tabs">
+          <button class="tab active" data-auth-tab="login">Login</button>
+          <button class="tab" data-auth-tab="register" id="registerTab">Student Signup</button>
+        </div>
+
+        <form id="loginForm" class="form auth-form">
+          <h3 id="loginTitle">Student Login</h3>
+          <label>Email<input type="email" id="loginEmail" required placeholder="you@example.com" /></label>
+          <label>Password
+            <div class="password-wrap"><input type="password" id="loginPassword" required placeholder="••••••••" /><button type="button" class="password-toggle" data-toggle-password="loginPassword">Show</button></div>
+          </label>
+          <button class="btn primary" type="submit">Login</button>
+          <button class="btn google" type="button" id="googleLoginBtn">Sign in with Google</button>
+          <button class="link-btn" type="button" id="resetPasswordBtn">Forgot password? Reset it</button>
+        </form>
+
+        <form id="registerForm" class="form auth-form hidden">
+          <h3 id="registerTitle">Student Registration</h3>
+          <label>Full Name<input type="text" id="regName" required placeholder="Jane Student" /></label>
+          <label>Matric / Staff ID<input type="text" id="regId" required placeholder="GIIT/2026/001" /></label>
+          <label>Email<input type="email" id="regEmail" required placeholder="you@example.com" /></label>
+          <label>Password
+            <div class="password-wrap"><input type="password" id="regPassword" required minlength="6" placeholder="Minimum 6 characters" /><button type="button" class="password-toggle" data-toggle-password="regPassword">Show</button></div>
+          </label>
+          <label>Confirm Password
+            <div class="password-wrap"><input type="password" id="regConfirmPassword" required minlength="6" placeholder="Retype password" /><button type="button" class="password-toggle" data-toggle-password="regConfirmPassword">Show</button></div>
+          </label>
+          <button class="btn primary" type="submit" id="registerSubmitBtn">Create Student Account</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="appView" class="hidden">
+      <div class="dashboard-header">
+        <div>
+          <span id="rolePill" class="pill accent">Student</span>
+          <h2 id="welcomeTitle">Dashboard</h2>
+          <p id="welcomeSub">Manage your clearance activities.</p>
+        </div>
+        <button id="refreshBtn" class="btn secondary">Refresh</button>
+      </div>
+
+      <div id="studentDashboard" class="dashboard hidden">
+        <div class="stats-grid">
+          <article class="stat-card"><span>Required Departments Left</span><strong id="studentBillsTotal">0</strong></article>
+          <article class="stat-card"><span>Payment Proofs</span><strong id="studentPaymentsCount">0</strong></article>
+          <article class="stat-card"><span>Clearance Status</span><strong id="studentStatus">Pending</strong></article>
+        </div>
+
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head"><h3>Departmental Clearance Status</h3><small>Each required office must approve payment proof</small></div>
+            <div id="clearanceProgress" class="progress-tracker"></div>
+            <div class="table-wrap"><table><thead><tr><th>Department</th><th>Required Payment</th><th>Status</th></tr></thead><tbody id="billsTable"></tbody></table></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><h3>Upload Payment Proof</h3><small>Receipts, teller or transfer screenshot</small></div>
+            <form id="paymentForm" class="form compact">
+              <label>Payment Type<select id="paymentType" required></select></label>
+              <label>Clearance Department<select id="paymentDepartment" required></select></label>
+              <label>Amount Paid<input type="number" id="paymentAmount" min="1" required placeholder="5000" /></label>
+              <label>Reference Number<input type="text" id="paymentRef" required placeholder="TXN123456" /></label>
+              <label>Proof File<input type="file" id="paymentFile" required accept="image/*,.pdf" /></label>
+              <button class="btn primary" type="submit">Submit for Review</button>
+            </form>
+          </section>
+        </div>
+
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head"><h3>Payment History</h3><small>Submitted proofs and review decisions</small></div>
+            <div class="search-box"><input type="search" id="studentPaymentSearch" placeholder="Search your payment history by type, department, reference or status..." /></div>
+            <div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Department</th><th>Amount</th><th>Status</th><th>Note</th></tr></thead><tbody id="paymentHistoryTable"></tbody></table></div>
+          </section>
+
+          <section class="panel certificate-panel">
+            <div class="panel-head"><h3>Clearance Certificate</h3><small>Available after admin approval</small></div>
+            <div id="certificatePreview" class="certificate-preview"></div>
+            <button id="downloadCertificateBtn" class="btn primary">Download Certificate PDF</button>
+          </section>
+        </div>
+      </div>
+
+      <div id="adminDashboard" class="dashboard hidden">
+        <div class="stats-grid">
+          <article class="stat-card"><span>Total Students</span><strong id="adminStudentsCount">0</strong></article>
+          <article class="stat-card"><span>Pending Payments</span><strong id="adminPendingCount">0</strong></article>
+          <article class="stat-card"><span>Control Scope</span><strong id="adminClearedCount">-</strong></article>
+        </div>
+
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head"><h3>Student Records</h3><small>View clearance status only</small></div>
+            <div class="search-box"><input type="search" id="adminStudentSearch" placeholder="Search students by name, matric number, email or status..." /></div>
+            <div class="table-wrap"><table><thead><tr><th>Name</th><th>ID</th><th>Status</th><th>Email</th><th>Action</th></tr></thead><tbody id="studentsTable"></tbody></table></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><h3>Central Administration</h3><small>Single administrator account</small></div>
+            <div class="department-card">
+              <span class="eyebrow">Control Scope</span>
+              <h3 id="adminDepartmentName">All Departments</h3>
+              <p>Review proofs from every department, approve valid receipts, set clearance status and provide feedback when a submission is rejected.</p>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head actions-head"><div><h3>All Department Payment Proofs</h3><small>Approve or reject proof from every clearance department</small></div><button id="exportReportBtn" class="btn secondary">Export CSV Report</button></div>
+          <div class="search-box"><input type="search" id="adminPaymentSearch" placeholder="Search proofs by student, payment type, reference, amount or status..." /></div>
+          <div class="table-wrap"><table><thead><tr><th>Student</th><th>Type</th><th>Department</th><th>Amount</th><th>Reference</th><th>Proof</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminPaymentsTable"></tbody></table></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div id="rejectionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="rejectionModalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <span class="eyebrow danger-label">Reject Payment</span>
+          <h3 id="rejectionModalTitle">Give rejection reason</h3>
+        </div>
+        <button class="modal-close" type="button" id="rejectionCancelBtn" aria-label="Close">×</button>
+      </div>
+      <p class="modal-text">Explain why this payment proof is rejected so the student knows what to correct before resubmitting.</p>
+      <label>Reason
+        <textarea id="rejectionReasonInput" rows="5" placeholder="Example: The reference number does not match the uploaded receipt." required></textarea>
+      </label>
+      <div class="modal-actions">
+        <button class="btn ghost" type="button" id="rejectionBackBtn">Cancel</button>
+        <button class="btn danger" type="button" id="rejectionSubmitBtn">Reject Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>GIIT Clearance System — separate GIIT database, one central administrator, secure digital student clearance.</p>
+  </footer>
+
+  <script src="firebase-config.js"></script>
+  <script src="vendor/jspdf.umd.min.js"></script>
+  <script src="vendor/qrcode.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
